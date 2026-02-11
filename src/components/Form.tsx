@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid"
-import { useState, type FormEvent } from "react"
+import { useState,type FormEvent } from "react"
 import type { Task } from "../types"
 import { taskPriorities } from "../data/data"
 
@@ -9,15 +9,14 @@ type FormProps = {
 }
 
 const initialState: Task = {
-  id: '',
-  priority: '1',
-  task: '',
-  isCompleted: false
+    id: '',
+    priority: '1',
+    task: '',
+    isCompleted: false
 }
 
 function Form({ tasks, setTasks }: FormProps) {
-
-  const [data, setData] = useState<Task>(initialState)
+    const [data, setData] = useState<Task>(initialState)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setData({
@@ -46,11 +45,11 @@ function Form({ tasks, setTasks }: FormProps) {
   return (
     <>
       <form
-        className=""
+        className="bg-gray-700 p-8 rounded-2xl shadow-lg max-w-md mx-auto"
         onSubmit={handleSubmit}
       >
-        <div>
-          <label>Tarea: </label>
+        <div className="mb-4">
+          <label className="block text-white font-semibold mb-2">Tarea: </label>
           <input
             type="text"
             id="task"
@@ -58,16 +57,18 @@ function Form({ tasks, setTasks }: FormProps) {
             placeholder="Escribe tu tarea. e.j: Comprar pan"
             value={data.task}
             onChange={handleChange}
+            className="w-full p-3 rounded-lg border-2 border-gray-500 focus:border-blue-500 focus:outline-none transition-colors text-white"
           />
         </div>
 
-        <div>
-          <label>Prioridad: </label>
+        <div className="mb-6">
+          <label className="block text-white font-semibold mb-2">Prioridad: </label>
           <select
             id="priority"
             name="priority"
             value={data.priority}
             onChange={handleChange}
+            className="w-full p-3 rounded-lg border-2 border-gray-500 focus:border-blue-500 focus:outline-none transition-colors cursor-pointer text-white"
           >
             {taskPriorities.map((priority) => (
               <option key={priority.id} value={priority.id}>{priority.name}</option>
