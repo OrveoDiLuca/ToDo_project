@@ -1,22 +1,33 @@
 import { v4 as uuidv4 } from "uuid"
-import { useState,type FormEvent } from "react"
+import { useState, useEffect} from "react"
+import { type FormEvent } from "react"
 import type { Task } from "../types"
 import { taskPriorities } from "../data/data"
 
 type FormProps = {
   tasks: Task[]
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>
+  editTasks: Task | null,
+  setEditTask: React.Dispatch<React.SetStateAction<Task | null>>
 }
 
 const initialState: Task = {
-    id: '',
-    priority: '1',
-    task: '',
-    isCompleted: false
+  id: '',
+  priority: '1',
+  task: '',
+  isCompleted: false
 }
 
-function Form({ tasks, setTasks }: FormProps) {
-    const [data, setData] = useState<Task>(initialState)
+function Form({ tasks, setTasks, editTasks, setEditTask }: FormProps) {
+  const [data, setData] = useState<Task>(initialState)
+
+  useEffect(() => {
+    if (editTasks) {
+
+      setData(editTasks)
+
+    }
+  }, [editTasks])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setData({
@@ -32,14 +43,21 @@ function Form({ tasks, setTasks }: FormProps) {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if(data.id){
+      //Editando la tarea.
+      setTasks(tasks.map(t => t.id === data.id ? data : t))
+      setEditTask(null)
+      
+    }else{
+      const newTask: Task = {
+        ...data,
+        id: uuidv4(),
+        task: data.task.trim()
+      }
 
-    const newTask: Task = {
-      ...data,
-      id: uuidv4(),
-      task: data.task.trim()
+      setTasks([...tasks, newTask])
     }
-
-    setTasks([...tasks, newTask])
+    
     setData(initialState)
   }
   return (
